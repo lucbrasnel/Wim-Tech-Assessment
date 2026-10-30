@@ -11,8 +11,9 @@ public class Solution
     public static void Main()
     {
         int[] Frequencies = { 110, 111, 112, 113, 114, 115 };
-        string projDir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName; // Gets project directory from \bin\Debug
-        string FileName = projDir + "\\Example Input.csv"; 
+        string projDir = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\"; // Gets project directory from \bin\Debug
+        string inputFile = projDir + "Example Input.csv";
+        string outputFile = projDir + "Example Output.csv";
         bool verbose = true; // set to false to not print progress
 
         // -------------- Create List of cell sites & Assign random frequencies -------------------
@@ -24,7 +25,7 @@ public class Solution
         FreqList FreqSitesList = new FreqList(Frequencies);
 
         // Read File (using CsvHelper https://joshclose.github.io/CsvHelper/)
-        using var reader = CsvReader.FromFile(FileName);
+        using var reader = CsvReader.FromFile(inputFile);
 
         var CellID = reader.GetFieldIndex("Cell ID");
         var Easting = reader.GetFieldIndex("Easting");
@@ -173,17 +174,33 @@ public class Solution
         // CellID | Frequency | Interference
         string output = "Cell ID - Frequency - Total Interference";
 
+        // Write to File
+        using var writer = CsvWriter.ToFile(outputFile);
+        writer.WriteHeader("Cell ID", "Frequency", "Total Interference", "Easting", "Northing", "Longitude", "Latitude");
+
         foreach (CellSite s in Sites)
         {
             double intf = interferenceHeap.GetSiteInterference(s);
 
+            // Build Command line output
             output += $"\n{s.CellID} - {s.Frequency} - {intf}";
+
+            // write to file
+            writer.WriteField(s.CellID);
+            writer.WriteField(s.Frequency);
+            writer.WriteField(intf);
+            writer.WriteField(s.GetNorthEasting()[1]); // Easting
+            writer.WriteField(s.GetNorthEasting()[0]); // Northing
+            writer.WriteField(s.GetLatLong()[1]); // Longitude
+            writer.WriteField(s.GetLatLong()[0]); // Latitude
+
+            writer.EndRecord();
         }
 
-        Console.WriteLine(output);
+        if (verbose) { Console.WriteLine($"Wrote to file - {outputFile}\n"); }
 
-        // Write to File
-
+            // Write command line output
+            Console.WriteLine(output);
 
         // ---------------------------------- AI Extension ----------------------------------------
 
