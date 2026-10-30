@@ -36,7 +36,6 @@ public class Solution
         while (reader.Read())
         {
             if (verbose){ Console.WriteLine("------- Reading File -------"); }
-            // skip header ??
 
             // get site info
             string id = reader.GetString(CellID);
