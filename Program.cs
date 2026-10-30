@@ -163,13 +163,6 @@ public class Solution
 
         if (verbose) { Console.WriteLine("\n" + FreqSitesList.ToString() + "\n"); }
 
-        // Calculate statistics
-        double avgInterference = 0;
-        double[] avgInterferencePerFreq = new double[Frequencies.Length];
-        int[] totalSitesPerFreq = new int[Frequencies.Length];
-        int avgSitePerFreq = 0;
-
-
         // Create output table
         // CellID | Frequency | Interference
         string output = "Cell ID - Frequency - Total Interference";
@@ -201,8 +194,6 @@ public class Solution
 
             // Write command line output
             Console.WriteLine(output);
-
-        // ---------------------------------- AI Extension ----------------------------------------
 
     }
 

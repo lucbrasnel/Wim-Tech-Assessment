@@ -53,12 +53,6 @@ namespace CellSites
 
         // ------------------- UTILITY --------------------------
 
-        public double GetGeoDistance(CellSite b)
-        {
-            // Might add ability to calculate geodisic distance with long/lat
-            return -1;
-        }
-
         public double GetProjectedDistance(CellSite b)
         {
             // Easting/Northing uses points on a projected 2D plane, so distance is an easy slope calculation
